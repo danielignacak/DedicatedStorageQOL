@@ -79,11 +79,14 @@ public class DedicatedStorageQOL : BaseUnityPlugin
         Inventory playerInventory = player.GetInventory();
         if (playerInventory == null) return;
 
-        List<ItemDrop.ItemData> itemsToTransfer = new List<ItemDrop.ItemData>(playerInventory.GetAllItems());
+        List<ItemDrop.ItemData> itemsToTransfer = new List<ItemDrop.ItemData>(playerInventory.GetAllItems()); //.Where(it => playerInventory.GetEquippedItems().Contains(it) == false)); //.GetAllItems());
         int transferCount = 0;
 
         foreach (var item in itemsToTransfer)
         {
+            if (playerInventory.GetEquippedItems().Contains(item) || playerInventory.GetHotbar().Contains(item))
+                continue; // Skip equipped items
+
             bool transferred = false;
 
             foreach (var container in containers)
